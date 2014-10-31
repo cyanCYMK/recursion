@@ -6,15 +6,15 @@ var stringifyJSON = function(obj) {
   // your code goes here
   var quote = '"';
  
-  if (typeof obj === 'undefined') {
-  	return obj;
+  if (typeof obj === 'undefined' || typeof obj === 'function') {
+  	return undefined;
   } else if (!obj && obj !== 0) {
   	return obj + '';
   } else if (typeof obj === 'string') {
   	return quote + obj + quote;
   } else if (Array.isArray(obj)) {
-  	var res = (typeof res === 'undefined') ? [] : res;
-  	return stringifyArray(obj, res);
+  	var resArr = (typeof resArr === 'undefined') ? [] : resArr;
+  	return stringifyArray(obj, resArr);
   } else {
   	return obj.toString();
   }
@@ -26,16 +26,8 @@ var stringifyJSON = function(obj) {
   		return '[' + result.join(',') + ']';
   	} else {
   		var value = copy.pop();
-  		if (typeof value === 'string') {
-  			result.unshift(quote+value+quote);
-  			stringifyArray(copy, result);
-  		} else if (Array.isArray(value)) {
-  			var subResult = (typeof subResult === 'undefined') ? [] : subResult;
-  			result.unshift(stringifyArray(value, subResult));
-  		} else {
-  			result.unshift(value);
-  			stringifyArray(copy, result);
-  		}
   	}
+  	result.unshift(stringifyJSON(value));
+  	return stringifyArray(copy, result);
   }
 };
