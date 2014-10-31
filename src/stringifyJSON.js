@@ -15,6 +15,9 @@ var stringifyJSON = function(obj) {
   } else if (Array.isArray(obj)) {
   	var resArr = (typeof resArr === 'undefined') ? [] : resArr;
   	return stringifyArray(obj, resArr);
+  } else if (typeof obj === 'object') {
+  	var resObj = (typeof resObj === 'undefined') ? [] : resObj;
+  	return stringifyObject(obj, resObj);
   } else {
   	return obj.toString();
   }
@@ -29,5 +32,14 @@ var stringifyJSON = function(obj) {
   	}
   	result.unshift(stringifyJSON(value));
   	return stringifyArray(copy, result);
+  }
+  // recursive function to stringify an object
+  function stringifyObject(obj, result) {
+  	for (var key in obj) {
+      if (typeof obj[key] !== 'undefined' && typeof obj[key] !== 'function') {
+  			result.push(stringifyJSON(key+'') + ':' + stringifyJSON(obj[key]));
+  	  }
+  	}
+  	return '{' + result.join(',') + '}';
   }
 };
