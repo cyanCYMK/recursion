@@ -27,9 +27,8 @@ var stringifyJSON = function(obj) {
   	var index = copy.length - 1;
   	if (index < 0) {
   		return '[' + result.join(',') + ']';
-  	} else {
-  		var value = copy.pop();
   	}
+  	var value = copy.pop();
   	result.unshift(stringifyJSON(value));
   	return stringifyArray(copy, result);
   }
