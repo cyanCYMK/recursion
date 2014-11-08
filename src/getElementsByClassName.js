@@ -14,10 +14,10 @@ var getElementsByClassName = function(className){
   	
   }
 */
-  return getChildNodes(body, accumulator);
+  return getClasses(body, accumulator);
 
   // input element and looks through children until there are no more
-  function getChildNodes(element, accumulator){
+  function getClasses(element, accumulator){
   	var elClasses = element.classList;
   	var elChildren = Array.prototype.slice.apply(element.childNodes);
     if (typeof elClasses !== 'undefined') {
@@ -29,7 +29,15 @@ var getElementsByClassName = function(className){
           	accumulator.push(element);
           }
     	});
-    	return accumulator;
+    }
+    if (elChildren.length === 0) {
+      return accumulator;
+    }
+    else {
+      for (var i=0, l=elChildren.length; i<l; i++) {
+        var newEl = elChildren.pop();
+        return getClasses(newEl, accumulator);
+      }
     }
 /*  	if (typeof elClasses !== 'undefined' && elClasses.contains(className)) {
       accumulator.push(element);
