@@ -8,53 +8,27 @@ var getElementsByClassName = function(className){
   // your code here
   var body = document.body;
   var accumulator = (typeof accumulator === 'undefined') ? [] : accumulator;
-/*  var bodyClasses = body.classList || [];
-  var bodyIndex = bodyClasses.indexOf(className);
-  if (bodyClasses.indexOf(className) > -1) {
-  	
-  }
-*/
-  return getClasses(body, accumulator);
+  
+  loopThruElement(body, accumulator);
+  return accumulator;
 
-  // input element and looks through children until there are no more
-  function getClasses(element, accumulator){
-  	var elClasses = element.classList;
-  	var elChildren = Array.prototype.slice.apply(element.childNodes);
-    if (typeof elClasses !== 'undefined') {
-    	// loop through elClasses and look if it contains className
-    	// if it contains then push it
-    	elClasses = Array.prototype.slice.apply(elClasses);
-    	elClasses.forEach(function(val) {
-          if (val === className) {
-          	accumulator.push(element);
-          }
-    	});
+  function loopThruElement(element, accumulator){
+    accumulator = doesElementHaveClass(element, accumulator);
+    var children = element.childNodes;
+    for (var j=0, length=children.length; j<length; j++){
+      loopThruElement(children[j], accumulator);
     }
-    if (elChildren.length === 0) {
-      return accumulator;
-    }
-    else {
-      for (var i=0, l=elChildren.length; i<l; i++) {
-        var newEl = elChildren.pop();
-        return getClasses(newEl, accumulator);
+  }
+
+  function doesElementHaveClass(element, accumulator){
+    var classes = element.classList;
+    if (typeof classes !== 'undefined'){
+      for (var i=0, l=classes.length; i<l; i++){
+        if (classes[i] === className) {
+          accumulator.push(element);
+        }
       }
     }
-/*  	if (typeof elClasses !== 'undefined' && elClasses.contains(className)) {
-      accumulator.push(element);
-  	}*/
-  	// if children has more children in it, do until childNodes is []
-  	/*if (elChildren.length === 0) {
-  		return accumulator;
-  	}
-    for (var i=0, l=elChildren.length; i<l; i++) {
-      var childClasses = elChildren[i].classList;
-  	  if (typeof childClasses === 'undefined' || childClasses.length === 0) {
-  	    continue;
-  	  }
-  	  else if (childClasses.contains(className)) {
-  	   	accumulator.push(elChildren[i]);
-  	  }
-    }*/
+    return accumulator;
   }
-
 };
